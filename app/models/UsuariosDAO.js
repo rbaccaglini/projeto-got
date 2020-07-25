@@ -21,7 +21,6 @@ UsuariosDAO.prototype.auth = function(usuario, req, res){
             */
             collection.find(usuario).toArray(function(err, result){
                 if(result.length > 0){
-                    console.log('Autorizado')
                     req.session.autorizado = true
                     req.session.usuario = result[0].usuario
                     req.session.casa = result[0].casa

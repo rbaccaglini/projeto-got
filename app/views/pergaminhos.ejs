@@ -1,10 +1,36 @@
+
 <div id="pergaminhos">					
 	<h3>Pergaminhos</h3>
 	
 	<ul>
-		<li>1 enforcamento(s) programado - <small>restam 00000 segundos - <a href="#">revogar ordem</a></small></li>
-		<li>2 aldeão(ões) em treinamento de magia - <small>restam 00000 segundos - <a href="#">revogar ordem</a></small></li>
-		<li>1 aldeão(ões) em treinamento de história - <small>restam 00000 segundos - <a href="#">revogar ordem</a></small></li>
-		<li>5 aldeão(ões) coletando recursos - <small>restam 00000 segundos - <a href="#">revogar ordem</a></small></li>
+		<% for(acao=0; acao < acoes.length; acao++){ %>
+			<%
+			let txt_acao = ''
+			switch(parseInt(acoes[acao].acao)){
+				case 1: 
+					txt_acao = 'Coletar recursos (2G e 1H)'
+					break
+				case 2: 
+					txt_acao = 'Enforcar aldeão (3G e 2H)'
+					break
+				case 3: 
+					txt_acao = 'Ensinar história (1G e 5H)'
+					break
+				case 4: 
+					txt_acao = 'Ensinar magia (1G e 5H)'
+					break
+			}
+
+			const data = new Date()
+			const agora = data.getTime()
+			const tempo_restante = Math.round((acoes[acao].acao_termina_em - agora) / 1000)
+
+			%>
+			<li>
+				(<%=acoes[acao].quantidade%>) <%=txt_acao%> 
+				- <small>restam <span class="tempo_restante"><%=tempo_restante%></span> segundos 
+				- <a href="/revogar_acao?id=<%=acoes[acao]._id%>">revogar ordem</a></small>
+			</li>
+		<% } %>
 	</ul>
 </div>

@@ -21,7 +21,50 @@
 			$('#btn_sair').click(function(){
 				window.location.href = '/sair'
 			})
+
+			$('#btn_aldeoes').click(function(){
+				$("#msg").hide()
+				$.ajax({
+					url: '/aldeoes',
+					method: 'get',
+					success: function(data){
+						$("#acoes").html(data)
+					}
+				})
+			})
+
+			$('#btn_pergaminhos').click(function(){
+				$("#msg").hide()
+				$.ajax({
+					url: '/pergaminhos',
+					method: 'get',
+					success: function(data){
+						$("#acoes").html(data)
+						clearTimeout(timerId)
+						cronometro()
+					}
+				})
+			})
+
+
 		})
+
+		let timerId = null
+		function cronometro(){
+			$('.tempo_restante').each(function(){
+				const segundos = $(this).html()
+				const atual = parseInt(segundos) - 1
+
+				if(atual >= 0){
+					$(this).html(atual)
+				} else {
+					window.location = '/jogo?msg=C'
+				}
+
+			})
+			timerId = setTimeout('cronometro()', 1000)
+		}
+
 	</script>
 
 
@@ -67,10 +110,35 @@
 				</div>
 	    	</div>
 			
+			<% if(msg != '') { %>
+				<div class="row" id="msg">
+					<div class="col-sm-3"></div>
+					<div class="col-sm-9">
+						<% if(msg == 'err') { %>
+							<div class="alert alert-danger">
+								Verifique se o formulário foi preenchido corretamente.
+							</div>
+						<% } else if (msg == 'ok') {%>
+							<div class="alert alert-success">
+								Ação realizada com sucesso!!!
+							</div>
+						<% } else if (msg == 'C') { %>
+							<div class="alert alert-success">
+								Sua ordem foi cumprida...
+							</div>
+						<% } else if (msg == 'D') { %>
+							<div class="alert alert-success">
+								Sua ordem foi revogada...
+							</div>
+						<% } %>
+					</div>
+	    		</div>
+			<% } %>
+
 			<div class="row">
 				<div class="col-sm-3"></div>
 				<div class="col-sm-9">
-					<div class="acoes"></div>					
+					<div class="acoes" id="acoes">O que deseja fazer??</div>					
 				</div>
 			</div>
 			
@@ -81,12 +149,12 @@
 			
 				<div class="row">
 					<div class="col-sm-1">
-						<img src="images/outros/suditos.jpg" title="Aldeões" alt="Aldeões"/>
+						<img src="images/outros/suditos.jpg" title="Aldeões" alt="Aldeões" id="btn_aldeoes"/>
 						<span><%=jogo.suditos%></span>
 					</div>
 					
 					<div class="col-sm-1">
-						<img src="images/outros/pergaminho.jpg" title="Pergaminhos" alt="Pergaminhos"/>
+						<img src="images/outros/pergaminho.jpg" title="Pergaminhos" alt="Pergaminhos"  id="btn_pergaminhos"/>
 					</div>
 					
 					<div class="col-sm-8"></div>
