@@ -10,32 +10,23 @@
 
 		<!-- bootstrap - link cdn -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
 		<!-- incluindo css -->
 		<link href="css/style.css" rel="stylesheet">
 
 	</head>
 
-	<body class="body-index">
+	<body class="body-index" <% if(validacao.length > 0) {%> onload="abrePopUp()"<% } %> >
 
 		<nav class="navbar navbar-default navbar-static-top">
 			<div class="container">
-				<% if(validacao.length > 0) {%>
-					<div class="alert alert-danger">
-						<strong>Atenção!!</strong>
-						<ul>
-							<% for(let aux=0 ; aux < validacao.length ; aux++) { %>
-								<li><%= validacao[aux].msg %> </li>
-							<% } %>
-						</ul>
-					</div>
-				<% } %>
 				<form class="form-inline form-entrar" method="POST" action="/autenticar">
 					<div class="form-group">				
 						<input type="text" name="usuario" id="usuario" placeholder="Usuário" class="form-control" autocomplete="off" />
 						<input type="password" name="senha" id="senha" placeholder="Senha" class="form-control" />
-						<button type="submit" class="btn btn-success">Entrar</button>
-						<button type="button" class="btn btn-info">Cadastro</button>
+						<button type="submit" class="btn btn-primary">Entrar</button>
+						<button type="button" class="btn btn-info" id="btnCadastro" >Cadastro</button>
 					</div>
 				</form>
 			</div>
@@ -53,7 +44,44 @@
 	    		<div class="col-md-2"></div>
 		    	</div>
 	    	</div>
-	    </div>	
+		</div>	
+
+		<div class="modal fade" id="newModal" role="dialog">
+			<div class="modal-dialog">
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">×</button>
+				  <h4 class="modal-title">Atenção!!!</h4>
+				</div>
+				<div class="modal-body">
+					<% if(validacao.length > 0) {%>
+						<div class="alert alert-danger">
+							<% for(let aux=0 ; aux < validacao.length ; aux++) { %>
+								<p><%= validacao[aux].msg %> </p>
+							<% } %>
+						</div>
+					<% } %>
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		</div>
 		
+		<script>
+			<% if(validacao.length > 0) {%>
+				function abrePopUp() {
+					$("#newModal").modal("show")
+				}
+			<% } %>
+
+			$('#btnCadastro').click(function(){
+				window.location = '/cadastro'
+			})
+
+		</script>
+
 	</body>
 </html>

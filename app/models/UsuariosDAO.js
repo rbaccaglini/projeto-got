@@ -20,6 +20,9 @@ UsuariosDAO.prototype.auth = function(usuario, req, res){
             da collection do mongodb
             */
             collection.find(usuario).toArray(function(err, result){
+
+                console.log(result.length)
+
                 if(result.length > 0){
                     req.session.autorizado = true
                     req.session.usuario = result[0].usuario
@@ -31,7 +34,7 @@ UsuariosDAO.prototype.auth = function(usuario, req, res){
                 if(req.session.autorizado){
                     res.redirect("jogo");
                 }else{
-                    res.render("index", { validacao: {} });
+                    res.render("index", {validacao: [{msg: "usuário e ou senha inválidos"}]});
                 }
 
             })
