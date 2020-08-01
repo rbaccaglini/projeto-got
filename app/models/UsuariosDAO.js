@@ -1,3 +1,6 @@
+const crypto = require("crypto")
+
+
 function UsuariosDAO(connection){
     this._connection = connection()
 }
@@ -5,6 +8,10 @@ function UsuariosDAO(connection){
 UsuariosDAO.prototype.insert = function(usuario){
     this._connection.open(function(err, mongoclient){
         mongoclient.collection("usuarios", function(err, collection){
+
+            const senhaCrypto = crypto.createHash("md5").update(usuario.senha).digest("hex")
+            usuario.senha = senhaCrypto
+
             collection.insert(usuario)
             mongoclient.close()
         })
@@ -19,6 +26,10 @@ UsuariosDAO.prototype.auth = function(usuario, req, res){
             os index da variável 'usuario' são os mesmos dos atributos 
             da collection do mongodb
             */
+
+           const senhaCrypto = crypto.createHash("md5").update(usuario.senha).digest("hex")
+           usuario.senha = senhaCrypto
+
             collection.find(usuario).toArray(function(err, result){
 
                 console.log(result.length)
